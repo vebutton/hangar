@@ -59,3 +59,11 @@
   present). Cold-start memory ~0.8 GB in total, no restarts; gateway untouched.
 - The operator OK'd restarting the co-tenant gateway for that occasion only; a gateway
   restart or reboot still needs an OK each time (`docs/vps.md`).
+- T-PLANE-06: the operator created the admin account (company "Hangar") and the
+  workspace, and disabled public sign-up. Workspace slug in `CLAUDE.local.md`. In
+  v1.5.1, API tokens live at Settings → Profile → API tokens
+  (`/settings/profile/api-tokens/`).
+- T-PLANE-07: token in the macOS keychain (`hangar-plane-api-key`). `scripts/plane-mcp.sh`
+  wraps `uvx plane-mcp-server@0.3.7 stdio`. Registered at user scope (operator's choice:
+  the pilot runs from another repo). The first connect timed out (30 s) while uvx
+  downloaded; after warming, connected with 33 tools. REST check: `/api/v1/users/me/` 200.

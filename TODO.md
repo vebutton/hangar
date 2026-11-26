@@ -39,8 +39,8 @@
 - [x] T-PLANE-03 Check VPS capacity (≥2 CPU, ≥4 GB RAM free, 8 GB recommended) and Podman version (resolved 2026-11-26: 2 vCPU, 7.6 GiB RAM / ~6.7 GiB available, 4 GB swap, 51 GB disk free; Podman 4.9.3)
 - [x] T-PLANE-04 Commit the deployment config (units or compose, `plane.env.example`, start/stop/upgrade scripts) (resolved 2026-11-26: `deploy/`, `scripts/deploy.sh`, `docs/deploy.md`; installed and validated on the box, nothing pulled or started)
 - [ ] T-PLANE-05 Deploy Plane on the VPS, bound to localhost only
-- [ ] T-PLANE-06 Reach the web UI through an SSH tunnel; create the admin account and workspace
-- [ ] T-PLANE-07 Create an API token and configure the Plane MCP server (stdio) in Claude Code on a Mac
+- [x] T-PLANE-06 Reach the web UI through an SSH tunnel; create the admin account and workspace (resolved 2026-11-26: admin account and workspace created via `hangar-tunnel`; public sign-up disabled)
+- [x] T-PLANE-07 Create an API token and configure the Plane MCP server (stdio) in Claude Code on a Mac (resolved 2026-11-26: token in the macOS keychain, `scripts/plane-mcp.sh`, user-scope `claude mcp add`, connected with 33 tools; `docs/mcp.md`)
 - [ ] T-PLANE-08 Smoke test: Claude Code creates, updates and closes a work item via MCP
 - [x] T-PLANE-09 Prepare the box: OS updates + reboot (gateway confirmed back), 4 GB swapfile, `hangar` user with lingering and a passphrase-protected key, Podman installed (resolved 2026-11-26: all done; `hangar` uid 1001, rootless Podman 4.9.3 on netavark/overlay/cgroup v2, Quadlet generator present)
 
@@ -54,9 +54,9 @@
   `docs/deploy.md`, raise any service near its cap or restarting from OOM, keep the
   steady total ≤4 GB, and update the caps table. Cold-start usage: ~0.8 GB in total;
   live and beat-worker are the highest at ~39% of their caps.
-- **T-PLANE-07:** `uvx plane-mcp-server stdio` with `PLANE_API_KEY`,
-  `PLANE_WORKSPACE_SLUG`, `PLANE_BASE_URL=http://localhost:<tunnel-port>`. Token never
-  committed.
+- **T-PLANE-08:** needs a new Claude Code session (MCP tools load at start) with
+  `ssh -f hangar-tunnel` up. Create a test project, then create, update and close a work
+  item through the `plane` MCP tools; delete the test project afterwards, or keep it.
 
 ## 3. Open questions
 - **Pilot project:** which existing repo with real ongoing feature work pilots Plane?

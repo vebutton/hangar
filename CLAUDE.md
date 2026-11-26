@@ -32,8 +32,8 @@ single-user, and self-hosted to avoid licence costs.
 
 ## Interface
 - Plane web UI, reached privately through an SSH tunnel (no public domain, no TLS).
-- Plane MCP server (`uvx plane-mcp-server stdio`, run locally on each Mac), pointed at
-  the tunnelled instance via `PLANE_BASE_URL`.
+- Plane MCP server (`scripts/plane-mcp.sh` → `uvx plane-mcp-server@0.3.7 stdio`, user-scope
+  in Claude Code on each Mac), pointed at the tunnelled instance. Setup: [docs/mcp.md](docs/mcp.md).
 - Plane REST API (`x-api-key` header) and webhooks, if needed later.
 
 ## Key Integrations
@@ -77,7 +77,7 @@ Date: 2026-11-25
 - **Objective:** Plane running under standalone Podman on the VPS. You can reach it
   privately over an SSH tunnel, and Claude Code on a Mac can read and write work items
   through the Plane MCP server.
-- **Status:** In progress. Plane running on the VPS; next is UI access and the admin account (T-PLANE-06).
+- **Status:** In progress. Plane running, workspace created, MCP connected; next is the smoke test (T-PLANE-08).
 - **Depends on:** Nothing; this is the first track.
 
 **Further tracks:** None yet. Add each as `### Track N — [Name] ([SLUG])` with the same
@@ -99,10 +99,10 @@ since 2026-11-26 (T-PLANE-05 open only for memory-cap tuning). Secrets live in
 
 **Next session — pick up here:**
 1. Cold start: re-read CLAUDE.md and CLAUDE.local.md.
-2. Tailscale vs SSH tunnel (TODO.md open question), then T-PLANE-06: `ssh -f
-   hangar-tunnel`, open `http://localhost:8090/god-mode/`, create the admin account.
-   Signup is open until then; only the tunnel reaches it.
-3. Finish T-PLANE-05's memory-cap tuning after some real use.
+2. T-PLANE-08 smoke test: `ssh -f hangar-tunnel`, then in this fresh session use the
+   `plane` MCP tools to create, update and close a work item.
+3. Finish T-PLANE-05's memory-cap tuning after some real use; then the Tailscale and
+   pilot-project questions (TODO.md §3).
 
 **Continuity reminders:**
 - Plane's official scripts (`setup.sh`, prime-cli) assume Docker, and Plane's Quadlets
