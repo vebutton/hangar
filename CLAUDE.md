@@ -91,8 +91,8 @@ existing track** or **must stand alone**.
 > Forward-looking operating context only. Backward-looking archaeology lives in
 > `docs/session-state.md`. Task state lives in `TODO.md`.
 
-**Last:** T-PLANE-01/02/03/09 closed. The box has 4 GB swap, a `hangar` user (SSH alias
-`hangar-tunnel`; plain `hangar` alias pending on the operator's Mac) and rootless
+**Last:** T-PLANE-01/02/03/09 closed. The box has 4 GB swap, a `hangar` user (SSH aliases
+`hangar` for a shell, `hangar-tunnel` for the 8090 forward) and rootless
 Podman 4.9.3. Decided: Community Edition with our own Quadlets. Nothing of Plane deployed.
 
 **Next session — pick up here:**
