@@ -30,3 +30,25 @@
   translate the compose file and re-check it on upgrades.
 - Read CE v1.5.1 (released 2026-11-25) `docker-compose.yml` + `variables.env`; findings
   in `TODO.md` → T-PLANE-04 detail.
+
+## 2026-11-26 (cont.) — Quadlets drafted (T-PLANE-04)
+- Read the CE v1.5.1 image internals: the proxy's Caddyfile routes by service name
+  (web/space/admin/live :3000, api :8000, plane-minio :9000). The api, worker and beat
+  entrypoints wait for the db and for migrations themselves.
+- Box checks: memory controller delegated to `hangar` (systemd 255); `envsubst` present.
+- Drafted `deploy/` (Quadlets, `plane.target`, env example + templates, `install.sh`,
+  `plane.sh`), `scripts/deploy.sh` and `docs/deploy.md`. Decisions: per-container
+  `--memory` caps instead of systemd `MemoryMax=` (RabbitMQ sizes itself from the
+  visible limit); per-service env files rendered with envsubst; Postgres
+  max_connections 200; proxy on 127.0.0.1:8090 only.
+- Gotcha: the Bash tool runs zsh, where unquoted `$var` doesn't word-split. It broke a
+  multi-volume loop; fixed by hand.
+- Not yet validated on the box and not committed; waiting on the operator's OK to run
+  `scripts/deploy.sh`.
+- Ran `scripts/deploy.sh` with the operator's OK. Three fixes along the way: the
+  placeholder check matched the example's comment line; the env-var regex skipped names
+  with digits (`AWS_S3_*`); macOS tar xattr warnings (now `--no-xattrs
+  --no-mac-metadata`). Quadlet 4.9 accepted the migrator's `Type=oneshot`. The proxy
+  publishes `127.0.0.1:8090:80`. All env files are 0600 with nothing unresolved.
+  The only generator warning is the harmless missing `/etc/containers/systemd/users/1001`.
+  Closed T-PLANE-04. Added the memory-cap tuning to T-PLANE-05's done criteria.

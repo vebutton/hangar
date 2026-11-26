@@ -1,0 +1,21 @@
+# Plane CE v1.5.1 — translated from the release docker-compose.yml (service: live)
+[Unit]
+Description=Plane live
+PartOf=plane.target
+Wants=plane-api.service
+After=plane-api.service
+
+[Container]
+ContainerName=live
+Image=docker.io/makeplane/plane-live:v1.5.1
+Network=plane.network
+EnvironmentFile=%h/hangar/env/live.env
+PodmanArgs=--memory=256m
+
+[Service]
+Restart=always
+RestartSec=5
+TimeoutStartSec=300
+
+[Install]
+WantedBy=plane.target

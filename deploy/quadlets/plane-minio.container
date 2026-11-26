@@ -1,0 +1,21 @@
+# Plane CE v1.5.1 — translated from the release docker-compose.yml (service: plane-minio)
+[Unit]
+Description=Plane plane-minio
+PartOf=plane.target
+
+[Container]
+ContainerName=plane-minio
+Image=docker.io/pgsty/silo:RELEASE.2026-09-16T00-00-00Z
+Network=plane.network
+EnvironmentFile=%h/hangar/env/minio.env
+Volume=plane-uploads.volume:/export
+Exec=server /export --console-address :9090
+PodmanArgs=--memory=256m
+
+[Service]
+Restart=always
+RestartSec=5
+TimeoutStartSec=300
+
+[Install]
+WantedBy=plane.target

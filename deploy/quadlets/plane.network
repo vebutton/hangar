@@ -1,0 +1,4 @@
+# Shared network for the Plane stack. Containers resolve each other by
+# ContainerName via aardvark-dns. (Podman 4.9 has no .pod units.)
+[Network]
+NetworkName=plane-nw

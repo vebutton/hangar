@@ -1,0 +1,25 @@
+# Plane CE v1.5.1 — translated from the release docker-compose.yml (service: migrator)
+[Unit]
+Description=Plane migrator
+PartOf=plane.target
+Wants=plane-db.service plane-redis.service
+After=plane-db.service plane-redis.service
+
+[Container]
+ContainerName=migrator
+Image=docker.io/makeplane/plane-backend:v1.5.1
+Network=plane.network
+EnvironmentFile=%h/hangar/env/app.env
+Volume=plane-logs-migrator.volume:/code/plane/logs
+Exec=./bin/docker-entrypoint-migrator.sh
+PodmanArgs=--memory=512m
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Restart=on-failure
+RestartSec=10
+TimeoutStartSec=300
+
+[Install]
+WantedBy=plane.target

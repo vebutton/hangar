@@ -1,0 +1,19 @@
+# Plane CE v1.5.1 — translated from the release docker-compose.yml (service: plane-redis)
+[Unit]
+Description=Plane plane-redis
+PartOf=plane.target
+
+[Container]
+ContainerName=plane-redis
+Image=docker.io/valkey/valkey:7.2.11-alpine
+Network=plane.network
+Volume=plane-redisdata.volume:/data
+PodmanArgs=--memory=128m
+
+[Service]
+Restart=always
+RestartSec=5
+TimeoutStartSec=300
+
+[Install]
+WantedBy=plane.target

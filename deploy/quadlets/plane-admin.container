@@ -1,0 +1,20 @@
+# Plane CE v1.5.1 — translated from the release docker-compose.yml (service: admin)
+[Unit]
+Description=Plane admin
+PartOf=plane.target
+Wants=plane-api.service plane-web.service
+After=plane-api.service plane-web.service
+
+[Container]
+ContainerName=admin
+Image=docker.io/makeplane/plane-admin:v1.5.1
+Network=plane.network
+PodmanArgs=--memory=64m
+
+[Service]
+Restart=always
+RestartSec=5
+TimeoutStartSec=300
+
+[Install]
+WantedBy=plane.target

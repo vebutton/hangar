@@ -1,0 +1,25 @@
+# Plane CE v1.5.1 — translated from the release docker-compose.yml (service: proxy)
+[Unit]
+Description=Plane proxy
+PartOf=plane.target
+Wants=plane-web.service plane-api.service plane-space.service plane-admin.service plane-live.service
+After=plane-web.service plane-api.service plane-space.service plane-admin.service plane-live.service
+
+[Container]
+ContainerName=proxy
+Image=docker.io/makeplane/plane-proxy:v1.5.1
+Network=plane.network
+EnvironmentFile=%h/hangar/env/proxy.env
+Volume=plane-proxy-config.volume:/config
+Volume=plane-proxy-data.volume:/data
+PodmanArgs=--memory=64m
+# Localhost only: reached through the SSH tunnel. No 443 (no TLS).
+PublishPort=127.0.0.1:8090:80
+
+[Service]
+Restart=always
+RestartSec=5
+TimeoutStartSec=300
+
+[Install]
+WantedBy=plane.target

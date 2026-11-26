@@ -1,0 +1,20 @@
+# Plane CE v1.5.1 — translated from the release docker-compose.yml (service: web)
+[Unit]
+Description=Plane web
+PartOf=plane.target
+Wants=plane-api.service plane-worker.service
+After=plane-api.service plane-worker.service
+
+[Container]
+ContainerName=web
+Image=docker.io/makeplane/plane-frontend:v1.5.1
+Network=plane.network
+PodmanArgs=--memory=64m
+
+[Service]
+Restart=always
+RestartSec=5
+TimeoutStartSec=300
+
+[Install]
+WantedBy=plane.target

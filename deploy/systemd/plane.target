@@ -1,0 +1,7 @@
+# Groups the Plane stack: `systemctl --user start|stop plane.target`.
+# Every plane-*.container has PartOf= and WantedBy= this target.
+[Unit]
+Description=Plane (Hangar)
+
+[Install]
+WantedBy=default.target

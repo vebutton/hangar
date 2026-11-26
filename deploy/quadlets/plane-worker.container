@@ -1,0 +1,23 @@
+# Plane CE v1.5.1 — translated from the release docker-compose.yml (service: worker)
+[Unit]
+Description=Plane worker
+PartOf=plane.target
+Wants=plane-db.service plane-redis.service plane-mq.service plane-migrator.service plane-api.service
+After=plane-db.service plane-redis.service plane-mq.service plane-migrator.service plane-api.service
+
+[Container]
+ContainerName=worker
+Image=docker.io/makeplane/plane-backend:v1.5.1
+Network=plane.network
+EnvironmentFile=%h/hangar/env/app.env
+Volume=plane-logs-worker.volume:/code/plane/logs
+Exec=./bin/docker-entrypoint-worker.sh
+PodmanArgs=--memory=640m
+
+[Service]
+Restart=always
+RestartSec=5
+TimeoutStartSec=300
+
+[Install]
+WantedBy=plane.target

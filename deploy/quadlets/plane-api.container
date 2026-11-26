@@ -1,0 +1,23 @@
+# Plane CE v1.5.1 — translated from the release docker-compose.yml (service: api)
+[Unit]
+Description=Plane api
+PartOf=plane.target
+Wants=plane-db.service plane-redis.service plane-mq.service plane-migrator.service
+After=plane-db.service plane-redis.service plane-mq.service plane-migrator.service
+
+[Container]
+ContainerName=api
+Image=docker.io/makeplane/plane-backend:v1.5.1
+Network=plane.network
+EnvironmentFile=%h/hangar/env/app.env
+Volume=plane-logs-api.volume:/code/plane/logs
+Exec=./bin/docker-entrypoint-api.sh
+PodmanArgs=--memory=768m
+
+[Service]
+Restart=always
+RestartSec=5
+TimeoutStartSec=300
+
+[Install]
+WantedBy=plane.target
