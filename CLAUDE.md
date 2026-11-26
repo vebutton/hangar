@@ -77,7 +77,7 @@ Date: 2026-11-25
 - **Objective:** Plane running under standalone Podman on the VPS. You can reach it
   privately over an SSH tunnel, and Claude Code on a Mac can read and write work items
   through the Plane MCP server.
-- **Status:** In progress. Quadlets installed; next is the first start (T-PLANE-05).
+- **Status:** In progress. Plane running on the VPS; next is UI access and the admin account (T-PLANE-06).
 - **Depends on:** Nothing; this is the first track.
 
 **Further tracks:** None yet. Add each as `### Track N — [Name] ([SLUG])` with the same
@@ -93,15 +93,16 @@ existing track** or **must stand alone**.
 
 **Last:** T-PLANE-01/02/03/09 closed. The box has 4 GB swap, a `hangar` user (SSH aliases
 `hangar` for a shell, `hangar-tunnel` for the 8090 forward) and rootless Podman 4.9.3.
-Decided: Community Edition with our own Quadlets. T-PLANE-04 done: Quadlets installed and validated
-on the box (`plane.target` enabled, secrets generated in `~hangar/hangar/plane.env`).
-No images pulled, no containers running.
+Decided: Community Edition with our own Quadlets. T-PLANE-04 done. Plane CE v1.5.1 **running** on the box
+since 2026-11-26 (T-PLANE-05 open only for memory-cap tuning). Secrets live in
+`~hangar/hangar/plane.env`.
 
 **Next session — pick up here:**
 1. Cold start: re-read CLAUDE.md and CLAUDE.local.md.
-2. T-PLANE-05: with the operator's OK, `plane.sh pull` + `plane.sh start` on the box,
-   then tune the memory caps (see the item detail).
-3. Tailscale vs SSH tunnel (TODO.md open question) before T-PLANE-06.
+2. Tailscale vs SSH tunnel (TODO.md open question), then T-PLANE-06: `ssh -f
+   hangar-tunnel`, open `http://localhost:8090/god-mode/`, create the admin account.
+   Signup is open until then; only the tunnel reaches it.
+3. Finish T-PLANE-05's memory-cap tuning after some real use.
 
 **Continuity reminders:**
 - Plane's official scripts (`setup.sh`, prime-cli) assume Docker, and Plane's Quadlets

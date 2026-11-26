@@ -15,6 +15,7 @@ The box already runs an **agent gateway** (a Node service, ~1 GB RSS, with Chrom
 spikes on demand) as a systemd user service under the existing login user, plus a
 daily backup timer at 03:00 UTC. It's another project's production workload:
 - Never restart it, reboot the box, or re-run its provisioning without the owner's OK.
+  An OK covers that one occasion only; ask again each time.
 - Don't run `terraform apply` or the co-tenant's full Ansible install against this box;
   both have drifted from it or overwrite live config.
 - Keep Hangar's scheduled jobs away from 03:00 UTC and off the top of the hour.

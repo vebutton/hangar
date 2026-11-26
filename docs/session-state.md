@@ -52,3 +52,10 @@
   publishes `127.0.0.1:8090:80`. All env files are 0600 with nothing unresolved.
   The only generator warning is the harmless missing `/etc/containers/systemd/users/1001`.
   Closed T-PLANE-04. Added the memory-cap tuning to T-PLANE-05's done criteria.
+- First start (T-PLANE-05), with the operator's OK: pulled 10 images in 46 s (four
+  services share plane-backend) and started `plane.target` in ~2 min. API and space
+  answered ~35 s after the units went active (the api entrypoint runs
+  register/configure/collectstatic first). All routes 200, `/uploads/` 403 (bucket
+  present). Cold-start memory ~0.8 GB in total, no restarts; gateway untouched.
+- The operator OK'd restarting the co-tenant gateway for that occasion only; a gateway
+  restart or reboot still needs an OK each time (`docs/vps.md`).

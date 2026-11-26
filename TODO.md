@@ -47,11 +47,13 @@
 ## 2. Item detail
 
 ### PLANE
-- **T-PLANE-05:** `plane.sh pull` + `plane.sh start` (the Quadlets already bind the proxy to
-  `127.0.0.1:8090` and set `WEB_URL` / CORS). Done only when the memory caps are tuned:
-  after the stack has idled and been used briefly, compare `plane.sh status` usage with
-  each `--memory` cap in `docs/deploy.md`, raise any service near its cap or restarting
-  from OOM, keep the steady total ≤4 GB, and update the caps table.
+- **T-PLANE-05:** started 2026-11-26. All 13 units are up (the migrator exited OK), no
+  restarts, every route returns 200 through `127.0.0.1:8090`; the co-tenant gateway was
+  unaffected. Left: the memory-cap tuning. After the stack has idled and been used
+  briefly (T-PLANE-06/08), compare `plane.sh status` with each `--memory` cap in
+  `docs/deploy.md`, raise any service near its cap or restarting from OOM, keep the
+  steady total ≤4 GB, and update the caps table. Cold-start usage: ~0.8 GB in total;
+  live and beat-worker are the highest at ~39% of their caps.
 - **T-PLANE-07:** `uvx plane-mcp-server stdio` with `PLANE_API_KEY`,
   `PLANE_WORKSPACE_SLUG`, `PLANE_BASE_URL=http://localhost:<tunnel-port>`. Token never
   committed.
