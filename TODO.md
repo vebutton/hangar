@@ -34,7 +34,7 @@
 - [x] T-PROJ-01 Create the remote GitHub repo and push the first commit (resolved 2026-11-25: public repo, first commit pushed)
 
 ### PLANE — Track 1: Plane deployment
-- [ ] T-PLANE-01 Gather the VPS access pattern (SSH user, keys, firewall, existing services/ports) from the operator's other VPS projects
+- [x] T-PLANE-01 Gather the VPS access pattern (SSH user, keys, firewall, existing services/ports) from the operator's other VPS projects (resolved 2026-11-26: pattern in `docs/vps.md`, specifics in `CLAUDE.local.md`)
 - [ ] T-PLANE-02 Decide Quadlets vs podman-compose for running Plane's stack
 - [ ] T-PLANE-03 Check VPS capacity (≥2 CPU, ≥4 GB RAM free, 8 GB recommended) and Podman version
 - [ ] T-PLANE-04 Commit the deployment config (units or compose, `plane.env.example`, start/stop/upgrade scripts)
@@ -42,16 +42,21 @@
 - [ ] T-PLANE-06 Reach the web UI through an SSH tunnel; create the admin account and workspace
 - [ ] T-PLANE-07 Create an API token and configure the Plane MCP server (stdio) in Claude Code on a Mac
 - [ ] T-PLANE-08 Smoke test: Claude Code creates, updates and closes a work item via MCP
+- [ ] T-PLANE-09 Prepare the box: OS updates + reboot (gateway confirmed back), 4 GB swapfile, `hangar` user with lingering and a passphrase-protected key, Podman installed
 
 ## 2. Item detail
 
 ### PLANE
-- **T-PLANE-01:** read-only research in the reference project named in `CLAUDE.local.md`.
-  It needs the operator's OK to read outside this repo. Record only the pattern here;
-  hosts and keys go to `CLAUDE.local.md`.
+- **T-PLANE-03:** capacity mostly known from the access brief (`docs/vps.md`): 2 vCPU,
+  7.6 GiB RAM with ~6.1 GiB available, no swap, 51 GB disk free. Left: the Podman
+  version, which only exists once Podman is installed (expected 4.9.x).
 - **T-PLANE-02:** start from Plane's "Podman Quadlets" self-hosting page
   (developers.plane.so → Self-hosting → Methods). Lean: Quadlets (systemd-native
   restarts, documented by Plane). Resolve after T-PLANE-03 confirms the Podman version.
+- **T-PLANE-09:** blocks T-PLANE-05. The operator applies the pending updates and
+  reboot first, since a reboot restarts the co-tenant gateway. Then: swapfile,
+  `useradd hangar` + `loginctl enable-linger hangar`, new ed25519 key with a passphrase
+  on the Mac, `apt install podman`. Recording `podman --version` closes T-PLANE-03.
 - **T-PLANE-05:** the proxy listens on `LISTEN_HTTP_PORT`. Bind it to `127.0.0.1` so
   nothing is exposed publicly. Set `WEB_URL` / `CORS_ALLOWED_ORIGINS` to the tunnel origin.
 - **T-PLANE-07:** `uvx plane-mcp-server stdio` with `PLANE_API_KEY`,
@@ -65,6 +70,11 @@
 - **Repo-to-project link:** how each repo points at its Plane project (a line in its
   CLAUDE.md vs a small config file with the project ID). Decide during the pilot.
 - **Podman approach:** Quadlets vs podman-compose. Resolved by T-PLANE-02.
+- **Tailscale on the VPS:** join the VPS to the operator's tailnet (this Mac plus 3
+  devices) so it can reach local resources, and possibly replace the SSH tunnel. The VPS
+  was kept off the tailnet to isolate the co-tenant's agents from local devices, so
+  joining needs ACLs/tags that limit what the VPS can reach. Affects how the tunnel stays
+  up (next question). Owner's call; decide before T-PLANE-06.
 - **Keeping the tunnel up:** how the SSH tunnel stays available for the MCP server from
   the Macs (manual `ssh -L`, autossh, launchd agent). Decide after T-PLANE-08; manual is
   acceptable for the first test.
@@ -84,6 +94,8 @@ Ideas that came up but aren't committed work. No ID until promoted into a track.
 - Hand Plane's Podman deployment over to the operator's Podman tooling project once it
   has a Linux mode.
 - Webhooks from Plane to other services.
+- VPS hardening for the box owner (outside Hangar's scope): root key login is enabled,
+  the co-tenant user has NOPASSWD sudo, and its Mac key has no passphrase.
 - Compare against GitHub Issues/Projects after the pilot.
 
 ## 6. Archive
