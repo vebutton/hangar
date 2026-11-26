@@ -27,7 +27,7 @@ single-user, and self-hosted to avoid licence costs.
 - **Input:** Plane's official container images and install assets; operator-supplied
   config (`plane.env` values, secrets kept out of the repo).
 - **Output:** a running Plane instance on the VPS; the deployment config that
-  reproduces it (Quadlet units or compose file, env template, scripts) in this repo;
+  reproduces it (Quadlet units, env template, scripts) in this repo;
   a documented MCP client setup that coding agents use from the operator's Macs.
 
 ## Interface
@@ -43,11 +43,12 @@ single-user, and self-hosted to avoid licence costs.
 - Offsite S3-compatible storage for backups (later; provider in `CLAUDE.local.md`)
 
 ## Tech / Tooling
-- **Runtime:** Podman on the VPS. No Docker, no native install. **Standalone:** no
+- **Runtime:** rootless Podman 4.9.3 on the VPS, under a dedicated `hangar` user. No Docker, no native install. **Standalone:** no
   dependency on the operator's separate Podman tooling project (see `CLAUDE.local.md`).
-- **Orchestration:** **undecided** between systemd Quadlets and podman-compose
-  (T-PLANE-02). The lean is Quadlets, since Plane documents a Podman Quadlets install
-  method. Settle it by reading that page and test-running on the VPS.
+- **Orchestration:** systemd **Quadlets**, written in this repo by translating Plane
+  Community Edition's release `docker-compose.yml` (decided in T-PLANE-02). Plane's own
+  Quadlets installer is Commercial Edition only; don't use it. VPS layout and
+  constraints: [docs/vps.md](docs/vps.md).
 - **Repo content:** deployment config and shell scripts, plus docs. No application
   code or language toolchain yet. If a helper script grows beyond shell, Python uses
   pyenv + uv (never venv/Poetry/Conda/Pipenv).
@@ -76,7 +77,7 @@ Date: 2026-11-25
 - **Objective:** Plane running under standalone Podman on the VPS. You can reach it
   privately over an SSH tunnel, and Claude Code on a Mac can read and write work items
   through the Plane MCP server.
-- **Status:** Not started.
+- **Status:** In progress. Box prepared; next is writing the Quadlets (T-PLANE-04).
 - **Depends on:** Nothing; this is the first track.
 
 **Further tracks:** None yet. Add each as `### Track N — [Name] ([SLUG])` with the same
@@ -90,20 +91,20 @@ existing track** or **must stand alone**.
 > Forward-looking operating context only. Backward-looking archaeology lives in
 > `docs/session-state.md`. Task state lives in `TODO.md`.
 
-**Last:** Repo shipped as a public GitHub repo (T-PROJ-01); nothing deployed yet.
+**Last:** T-PLANE-01/02/03/09 closed. The box has 4 GB swap, a `hangar` user (SSH alias
+`hangar-tunnel`; plain `hangar` alias pending on the operator's Mac) and rootless
+Podman 4.9.3. Decided: Community Edition with our own Quadlets. Nothing of Plane deployed.
 
 **Next session — pick up here:**
 1. Cold start: re-read CLAUDE.md and CLAUDE.local.md.
-2. T-PLANE-01: gather the VPS access pattern from the operator's other VPS
-   projects before touching the box.
-3. T-PLANE-02: settle Quadlets vs podman-compose, because every later deploy step
-   depends on it.
+2. T-PLANE-04: write the Quadlets from CE v1.5.1's compose file (notes in `TODO.md`
+   item detail), plus `plane.env.example` and scripts.
 
 **Continuity reminders:**
-- Plane's official scripts (`setup.sh`, prime-cli) assume Docker. Use the Podman
-  Quadlets method or translate the compose file; don't run `setup.sh` as-is.
+- Plane's official scripts (`setup.sh`, prime-cli) assume Docker, and Plane's Quadlets
+  method is Commercial Edition. Translate the CE compose file; don't run either.
 - `WEB_URL` and `CORS_ALLOWED_ORIGINS` in `plane.env` must match the exact origin the
-  browser uses through the tunnel (e.g. `http://localhost:8080`), or the UI breaks.
+  browser uses through the tunnel (`http://localhost:8090`), or the UI breaks.
 - On Community Edition, the hosted MCP server and OAuth can't reach a private instance.
   Use local stdio with an API token.
 

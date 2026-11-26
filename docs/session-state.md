@@ -15,3 +15,18 @@
   comes back.
 - Raised: put the VPS on the operator's tailnet (open question in `TODO.md`).
 - Noted for the box owner: root key login, NOPASSWD sudo, unencrypted key (Unscheduled).
+
+## 2026-11-26 — Box prepared; Quadlets decided (T-PLANE-02/03/09)
+- Operator applied OS updates + reboot and added a 4 GB swapfile; co-tenant gateway
+  confirmed back. Operator created a passphrase-protected key on the Mac.
+- Via the existing login user: created `hangar` (uid 1001, subuid range, lingering,
+  key-only), installed Podman 4.9.3 + netavark/aardvark-dns/passt/uidmap. No reboot
+  needed. Verified a `hangar` login and rootless `podman info` (netavark, overlay,
+  cgroup v2, Quadlet user generator present).
+- Plane's Podman Quadlets page turned out to be Commercial Edition only. Options weighed:
+  Commercial free plan + Plane's installer (A), CE + our own Quadlets (B), CE +
+  podman-compose (C). Chose B: native boot and restart, per-service memory caps,
+  localhost binding we control, and the repo fully reproduces the deploy. Cost: we
+  translate the compose file and re-check it on upgrades.
+- Read CE v1.5.1 (released 2026-11-25) `docker-compose.yml` + `variables.env`; findings
+  in `TODO.md` → T-PLANE-04 detail.

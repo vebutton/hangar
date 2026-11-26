@@ -7,7 +7,7 @@
 
 ## Host
 - Cloud VPS, dedicated-vCPU class. Ubuntu 24.04 LTS.
-- 2 vCPU, 7.6 GiB RAM, 75 GB disk. **No swap.**
+- 2 vCPU, 7.6 GiB RAM, 75 GB disk, 4 GB swapfile (added 2026-11-26).
 - Headroom at check time: ~6.1 GiB RAM available, 51 GB disk free, load ~0.1–0.35.
 
 ## Co-tenant
@@ -23,8 +23,9 @@ daily backup timer at 03:00 UTC. It's another project's production workload:
 - Direct key auth on port 22. Password and keyboard-interactive auth are off.
 - Existing login user = service user for the co-tenant, with NOPASSWD sudo. Root key
   login is enabled.
-- Hangar gets its **own user** (`hangar`) with its own passphrase-protected key, so it
-  stays out of the co-tenant's home directory, backups and sudo account.
+- Hangar has its **own user** (`hangar`, no sudo, lingering on) with its own
+  passphrase-protected key, so it stays out of the co-tenant's home directory, backups
+  and sudo account. Admin steps that need root go through the existing login user.
 - Recommended client config: `IdentitiesOnly yes`, `ServerAliveInterval 30`,
   `ServerAliveCountMax 10` (long sessions drop otherwise).
 - Non-interactive SSH: no per-user PATH additions; `systemctl --user` needs
@@ -39,8 +40,8 @@ daily backup timer at 03:00 UTC. It's another project's production workload:
   No ufw change needed.
 
 ## Containers
-- No container runtime installed. Ubuntu 24.04's `podman` package is 4.9.x, which
-  supports Quadlets (to be confirmed once installed). Installing it needs no reboot.
+- Podman 4.9.3 from Ubuntu's packages, with netavark, aardvark-dns and passt.
+  Quadlets are supported; `.pod` units are not (they arrived in Podman 5.0).
 - Rootless Podman under `hangar`, with lingering. Quadlets in
   `~/.config/containers/systemd/`; data under `~/hangar/` or named volumes.
 - Don't use Docker: published ports bypass ufw.
@@ -48,7 +49,7 @@ daily backup timer at 03:00 UTC. It's another project's production workload:
 ## Memory budget
 - Cap Plane's containers at ≤4 GB in total (`MemoryMax=` per Quadlet or a user slice),
   leaving room for the gateway and Chromium spikes.
-- Add a 4 GB swapfile before deploying, so an OOM doesn't kill the gateway.
+- The 4 GB swapfile gives headroom so an OOM is less likely to kill the gateway.
 
 ## Backups
 - The co-tenant's backup covers only its own data. Hangar needs its own `pg_dump` and

@@ -30,17 +30,18 @@ linking convention, and keeping the tunnel up permanently.
   the workflow.
 
 ### Deployment shape (from Plane docs, 2026-11-25)
-- **Services:** `web`, `space`, `api`, `worker`, `beat-worker`, `proxy`, plus a
-  one-shot `migrator`. Backing services: Postgres (`plane-db`), Redis/Valkey
-  (`plane-redis`), MinIO (`plane-minio`). RabbitMQ appears in some versions. Confirm
-  against the current release's compose file.
-- **Install assets:** `setup.sh` from the latest GitHub release generates
-  `docker-compose.yaml` and `plane.env`. It assumes Docker. Plane also documents a
-  **Podman Quadlets** method, which is the starting point for T-PLANE-02.
+- **Services (CE v1.5.1 compose, 13):** `web`, `space`, `admin`, `live`, `api`,
+  `worker`, `beat-worker`, `proxy`, plus a one-shot `migrator`. Backing services:
+  Postgres 15.7 (`plane-db`), Valkey 7.2 (`plane-redis`), RabbitMQ 3.13 (`plane-mq`),
+  MinIO-compatible object storage (`plane-minio`, image `pgsty/silo`).
+- **Install assets:** the GitHub release ships `docker-compose.yml`, `variables.env`
+  and `setup.sh`; they assume Docker. Plane's own Podman Quadlets method installs
+  **Commercial Edition** only, so Hangar writes its own Quadlets from the CE compose
+  file (T-PLANE-02).
 - **Ports:** the `proxy` serves `LISTEN_HTTP_PORT` (default 80) / `LISTEN_HTTPS_PORT`.
   Only HTTP is needed behind the tunnel.
 - **Key env:** `WEB_URL` and `CORS_ALLOWED_ORIGINS` must equal the browser's origin
-  through the tunnel (e.g. `http://localhost:8080`).
+  through the tunnel: `http://localhost:8090`.
 - **Persistent data:** volumes for Postgres (`pgdata`), Redis (`redisdata`), uploads
   and MinIO. Backup scope = Postgres + object storage.
 - **Minimum host:** 2 CPU, 4 GB RAM (8 GB recommended), x64 or ARM64.
@@ -77,5 +78,7 @@ linking convention, and keeping the tunnel up permanently.
 - MCP docs: developers.plane.so/dev-tools/mcp-server and `mcp-server-self-host`; repo
   github.com/makeplane/plane-mcp-server. Tool counts and token locations differ between
   the docs and the README, so check against the installed version.
-- Not yet read: the Podman Quadlets page, the backup page, the REST API reference and
+- Podman Quadlets page (read 2026-11-26): Commercial Edition only (`prime.plane.so`
+  tarball v2.6.3, Podman ≥ 4.4); doesn't cover stop, upgrade, backup or localhost binding.
+- Not yet read: the backup page, the REST API reference and
   the webhooks docs.

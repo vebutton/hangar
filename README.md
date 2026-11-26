@@ -10,8 +10,8 @@ replacing ad-hoc `todos.md` files.
 
 ## Shape
 
-- **Runtime:** Podman on Linux (no Docker). Orchestration via systemd Quadlets or
-  podman-compose; still being decided.
+- **Runtime:** rootless Podman on Linux (no Docker), orchestrated by systemd Quadlets
+  written in this repo from Plane Community Edition's compose file.
 - **Access:** private only. Every port binds to localhost on the VPS; the web UI and
   the MCP server reach it through an SSH tunnel. No public domain, no TLS.
 - **Agents:** `uvx plane-mcp-server stdio` runs locally on each Mac, pointed at the
@@ -31,5 +31,5 @@ for the spec and [TODO.md](TODO.md) for the task register.
 | `docs/requirements.md` | Requirements and deployment notes |
 | `docs/session-state.md` | Session history and decisions |
 
-Deployment config (Quadlet units or compose file, `plane.env.example`, scripts) lands
+Deployment config (Quadlet units, `plane.env.example`, scripts) lands
 here as the work progresses. Real secrets never enter the repo.
