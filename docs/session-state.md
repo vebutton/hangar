@@ -67,3 +67,7 @@
   wraps `uvx plane-mcp-server@0.3.7 stdio`. Registered at user scope (operator's choice:
   the pilot runs from another repo). The first connect timed out (30 s) while uvx
   downloaded; after warming, connected with 33 tools. REST check: `/api/v1/users/me/` 200.
+- Created `.atlas/overview.md` (gitignored; slug `hangar`, visibility public, role_fit
+  ic + ai-lead). One [NEEDS]: proof link after T-PLANE-08.
+- Session closed 2026-11-26. Next: T-PLANE-08 in a fresh session (MCP tools load at
+  start).

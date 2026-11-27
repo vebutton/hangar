@@ -103,6 +103,7 @@ since 2026-11-26 (T-PLANE-05 open only for memory-cap tuning). Secrets live in
    `plane` MCP tools to create, update and close a work item.
 3. Finish T-PLANE-05's memory-cap tuning after some real use; then the Tailscale and
    pilot-project questions (TODO.md §3).
+4. Refresh `.atlas/overview.md` (gitignored; created 2026-11-26) when work lands.
 
 **Continuity reminders:**
 - Plane's official scripts (`setup.sh`, prime-cli) assume Docker, and Plane's Quadlets
