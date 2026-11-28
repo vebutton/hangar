@@ -33,6 +33,8 @@ sets `PLANE_BASE_URL=http://localhost:8090`, and runs `uvx plane-mcp-server@0.3.
   at session start, so open the tunnel first or restart the session.
 - **First run is slow** (~40 s): uvx downloads the package. This can exceed Claude
   Code's 30 s connect timeout once; run `claude mcp get plane` again after the cache warms.
+  The operator's Macs set `"env": {"MCP_TIMEOUT": "60000"}` in `~/.claude/settings.json`
+  to give it 60 s. Mid-session recovery: `/mcp` → `plane` → Reconnect.
 - v0.3.7 advertises 33 tools for the workspace.
 - Revoke or rotate: delete the token in Plane, then
   `security delete-generic-password -s hangar-plane-api-key` and re-add.
